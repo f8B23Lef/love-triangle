@@ -1,56 +1,19 @@
-/**
- * @param preferences - an array of integers. Indices of people, whom they love
- * @returns number of love triangles
- */
 module.exports = function getLoveTrianglesCount(preferences = []) {
 
-  var loveTrianglesArr = [];
+  let count = 0;
 
-  for(var i = 0; i < preferences.length; i++) {
+  for(let i = 0, len = preferences.length; i < len; i++) {
 
-    var a = preferences[i];
-    if(a > preferences.length) continue;
+    const a = preferences[i];
+    const b = preferences[a-1];
+    const c = preferences[b-1];
 
-    var b = preferences[a-1];
-    if(b > preferences.length) continue;
-
-    var c = preferences[b-1];
-    if(c > preferences.length) continue;
-
-    var isTriangle = (a == preferences[c-1] && a != b && a != c && b != c);
-
+    const isTriangle = (c === i + 1 && a != b && a != c && b != c);
+    
     if(isTriangle) {
-
-      var curLoveTriangleArr = [a, b, c].sort(function(a, b) {
-        return a - b
-      });
-
-      if(loveTrianglesArr.length == 0) {
-        loveTrianglesArr.push(curLoveTriangleArr);
-      } else {
-        if(!containsArray(loveTrianglesArr, curLoveTriangleArr)) {
-          loveTrianglesArr.push(curLoveTriangleArr);
-        }
-      }
+      count++;
     }
   }
-  return loveTrianglesArr.length;
+
+  return count/3;
 };
-
-function containsArray(bigArr, targetArr) {
-
-  for(var i = 0; i < bigArr.length; i++) {
-    var equal = true;
-    for(var j = 0; j < targetArr.length; j++) {
-      if (bigArr[i][j] != targetArr[j]) {
-        equal = false;
-        break;
-      }
-    }
-
-    if(equal) {
-      return true;
-    }
-  }
-  return false;
-}
